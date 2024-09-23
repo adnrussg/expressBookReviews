@@ -50,7 +50,6 @@ regd_users.post("/login", (req,res) => {
   } else {
     return res.status(208).json({ message: 'Invalid Login. Check username and password' });
   }
-  //return res.status(300).json({message: "Yet to be implemented"});
 });
 
 // Add a book review
@@ -65,15 +64,14 @@ regd_users.put("/auth/review/:isbn", (req, res) => {
 
     if (bookReviews[username]) {
       bookReviews[username] = review;
-      return res.status(200).json({message: 'Review updated successfully.'});
+      return res.status(200).json({message: `Book with ISBN:${isbn}, Review updated successfully.`});
     } else {
       bookReviews[username] = review;
-      return res.status(200).json({message: 'Review added successfully.'});
+      return res.status(200).json({message: `Book with ISBN:${isbn}, Review added successfully.`});
     }
   } else {
     return res.status(404).json({message: 'Book not found.'});
   }
-  //return res.status(300).json({message: "Yet to be implemented"});
 });
 
 regd_users.delete("/auth/review/:isbn", (req, res) => {
@@ -84,7 +82,7 @@ regd_users.delete("/auth/review/:isbn", (req, res) => {
     const bookReviews = books[isbn].reviews;
     if (bookReviews[username]) {
       delete bookReviews[username];
-      return res.status(200).json({message: 'Review deleted successfully.'});
+      return res.status(200).json({message: `Review for ISBN: ${isbn} deleted successfully.`});
     } else {
       return res.status(404).json({message: 'Review by this user does not exist.'});
     }
