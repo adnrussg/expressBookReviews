@@ -56,7 +56,41 @@ regd_users.post("/login", (req,res) => {
 // Add a book review
 regd_users.put("/auth/review/:isbn", (req, res) => {
   //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+  const isbn = req.params.isbn;
+  const review = req.query.review;
+  const username = req.session.authorization.username;
+
+  if (books[isbn]) {
+    const bookReviews = books[isbn].reviews;
+
+    if (bookReviews[username]) {
+      bookReviews[username] = review;
+      return res.status(200).json({message: 'Review updated successfully.'});
+    } else {
+      bookReviews[username] = review;
+      return res.status(200).json({message: 'Review added successfully.'});
+    }
+  } else {
+    return res.status(404).json({message: 'Book not found.'});
+  }
+  //return res.status(300).json({message: "Yet to be implemented"});
+});
+
+regd_users.delete("/auth/review/:isbn", (req, res) => {
+  const isbn = req.params.isbn;
+  const username = req.session.authorization.username;
+
+  if (books[isbn]) {
+    const bookReviews = books[isbn].reviews;
+    if (bookReviews[username]) {
+      delete bookReviews[username];
+      return res.status(200).json({message: 'Review deleted successfully.'});
+    } else {
+      return res.status(404).json({message: 'Review by this user does not exist.'});
+    }
+  } else {
+    return res.status(404).json({message: 'Book does not exist.'});
+  }
 });
 
 module.exports.authenticated = regd_users;
